@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#2e3192"/>
+  <!-- Logo mark centered: original paths fit 52x70, scaled ~5.5x and centered -->
+  <g transform="translate(113, 76) scale(5.5)">
+    <path fill="#ffffff" d="m21 69v-35l8 5v-8l-4-3-25 16v12z"/>
+    <path fill="#29aae2" d="m52 30.5v23.5l-26.7 16-0.3-29 4.9 3.9z"/>
+    <path fill="#29aae2" d="m38 0l0.1 33 12.9-8v-18"/>
+    <path fill="#ffffff" d="m0 17l24-15 9 6v19l-8-5-25 15z"/>
+  </g>
+</svg>
