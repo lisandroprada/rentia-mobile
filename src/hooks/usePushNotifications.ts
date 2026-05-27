@@ -30,9 +30,12 @@ export function usePushNotifications() {
     const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
     if (!vapidKey) return false;
 
-    const perm = await Notification.requestPermission();
-    setPermission(perm);
-    if (perm !== 'granted') return false;
+    // Only call requestPermission when not already granted (iOS blocks it outside user gesture)
+    if (Notification.permission !== 'granted') {
+      const perm = await Notification.requestPermission();
+      setPermission(perm);
+      if (perm !== 'granted') return false;
+    }
 
     const registration = await navigator.serviceWorker.ready;
     const existing = await registration.pushManager.getSubscription();
