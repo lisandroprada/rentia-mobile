@@ -1,9 +1,10 @@
-import { LogOut, User, Building2, Shield } from 'lucide-react';
+import { LogOut, User, Building2, Shield, Bell, BellOff } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { AppRoute } from '../../types';
 import AppShell from '../../components/layout/AppShell';
 import Avatar from '../../components/ui/Avatar';
 import Badge from '../../components/ui/Badge';
+import { usePushNotifications } from '../../hooks/usePushNotifications';
 
 interface Props {
   currentRoute: AppRoute;
@@ -19,6 +20,7 @@ const ROLE_LABELS: Record<string, string> = {
 
 export default function ProfilePage({ currentRoute, onNavigate, unreadChat }: Props) {
   const { user, logout } = useAuth();
+  const { permission, subscribe } = usePushNotifications();
 
   if (!user) return null;
 
@@ -27,6 +29,8 @@ export default function ProfilePage({ currentRoute, onNavigate, unreadChat }: Pr
   const handleLogout = () => {
     logout();
   };
+
+  const pushSupported = 'Notification' in window && 'PushManager' in window && !!import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
   return (
     <AppShell title="Perfil" currentRoute={currentRoute} onNavigate={onNavigate} unreadChat={unreadChat}>
@@ -68,6 +72,34 @@ export default function ProfilePage({ currentRoute, onNavigate, unreadChat }: Pr
             </div>
           </div>
         </div>
+
+        {/* Notifications */}
+        {pushSupported && (
+          <div className="px-4">
+            {permission === 'granted' ? (
+              <button
+                onClick={() => subscribe()}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-green-50 text-green-700 font-semibold text-sm active:bg-green-100 transition-colors"
+              >
+                <Bell size={18} />
+                Notificaciones activadas — tocar para re-registrar
+              </button>
+            ) : permission === 'denied' ? (
+              <div className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gray-50 text-gray-400 text-sm">
+                <BellOff size={18} />
+                Notificaciones bloqueadas en ajustes del dispositivo
+              </div>
+            ) : (
+              <button
+                onClick={() => subscribe()}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-50 text-[#2e3192] font-semibold text-sm active:bg-blue-100 transition-colors"
+              >
+                <Bell size={18} />
+                Activar notificaciones de mensajes
+              </button>
+            )}
+          </div>
+        )}
 
         {/* App info */}
         <div className="px-4">
