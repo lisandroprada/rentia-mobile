@@ -6,6 +6,7 @@ import { useWhatsAppSocket } from './hooks/useWhatsAppSocket';
 import { useAppBadge } from './hooks/useAppBadge';
 
 import DesktopBanner from './components/ui/DesktopBanner';
+import UpdatePrompt from './components/ui/UpdatePrompt';
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import CrmTab from './pages/crm/CrmTab';
@@ -67,6 +68,7 @@ export function AppWithProviders() {
   return (
     <>
       <DesktopBanner />
+      <UpdatePrompt />
       <App />
       <Toaster
         position="top-center"
