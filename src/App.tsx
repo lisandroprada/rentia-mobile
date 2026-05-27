@@ -3,7 +3,9 @@ import { Toaster } from 'react-hot-toast';
 import { AppRoute } from './types';
 import { useAuth } from './contexts/AuthContext';
 import { useWhatsAppSocket } from './hooks/useWhatsAppSocket';
+import { useAppBadge } from './hooks/useAppBadge';
 
+import DesktopBanner from './components/ui/DesktopBanner';
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import CrmTab from './pages/crm/CrmTab';
@@ -22,7 +24,8 @@ export default function App() {
   const { isAuthenticated, isLoading } = useAuth();
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(getInitialRoute);
 
-  useWhatsAppSocket(isAuthenticated && currentRoute.startsWith('chat'));
+  useWhatsAppSocket(isAuthenticated);
+  const unreadChat = useAppBadge();
 
   useEffect(() => {
     if (isAuthenticated) localStorage.setItem(ROUTE_KEY, currentRoute);
@@ -42,7 +45,7 @@ export default function App() {
     return <LoginPage onLogin={() => handleNavigate(AppRoute.Dashboard)} />;
   }
 
-  const tabProps = { currentRoute, onNavigate: handleNavigate };
+  const tabProps = { currentRoute, onNavigate: handleNavigate, unreadChat };
 
   if (currentRoute === AppRoute.Profile) {
     return <ProfilePage {...tabProps} />;
@@ -63,6 +66,7 @@ export default function App() {
 export function AppWithProviders() {
   return (
     <>
+      <DesktopBanner />
       <App />
       <Toaster
         position="top-center"

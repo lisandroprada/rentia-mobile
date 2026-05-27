@@ -12,6 +12,7 @@ import { formatRelativeTime } from '../../utils/dateUtils';
 interface Props {
   currentRoute: AppRoute;
   onNavigate: (route: AppRoute) => void;
+  unreadChat?: number;
 }
 
 const PIPELINE_STAGES: CrmCaseStatus[] = ['NUEVO', 'CONTACTADO', 'CALIFICADO', 'PROPUESTA', 'NEGOCIACION'];
@@ -36,7 +37,7 @@ function StatCard({
   );
 }
 
-export default function DashboardPage({ currentRoute, onNavigate }: Props) {
+export default function DashboardPage({ currentRoute, onNavigate, unreadChat }: Props) {
   const { user } = useAuth();
 
   const { data: cases, isLoading: loadingCases } = useQuery({
@@ -78,7 +79,7 @@ export default function DashboardPage({ currentRoute, onNavigate }: Props) {
   const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
 
   return (
-    <AppShell title="Inicio" currentRoute={currentRoute} onNavigate={onNavigate}>
+    <AppShell title="Inicio" currentRoute={currentRoute} onNavigate={onNavigate} unreadChat={unreadChat}>
       <div className="flex flex-col gap-5 pb-8">
 
         {/* Greeting */}

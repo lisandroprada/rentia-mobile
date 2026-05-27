@@ -9,9 +9,10 @@ type ChatScreen = 'list' | 'thread';
 interface Props {
   currentRoute: AppRoute;
   onNavigate: (route: AppRoute) => void;
+  unreadChat?: number;
 }
 
-export default function ChatTab({ currentRoute, onNavigate }: Props) {
+export default function ChatTab({ currentRoute, onNavigate, unreadChat }: Props) {
   const [screen, setScreen] = useState<ChatScreen>('list');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [selectedContactName, setSelectedContactName] = useState('');
@@ -28,6 +29,7 @@ export default function ChatTab({ currentRoute, onNavigate }: Props) {
       currentRoute={currentRoute}
       onNavigate={onNavigate}
       onBack={screen === 'thread' ? () => setScreen('list') : undefined}
+      unreadChat={unreadChat}
     >
       {screen === 'list' && <ConversationListPage onOpenThread={handleOpenThread} />}
       {screen === 'thread' && selectedCaseId && (

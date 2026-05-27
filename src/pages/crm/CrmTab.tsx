@@ -13,9 +13,10 @@ interface Props {
   currentRoute: AppRoute;
   onNavigate: (route: AppRoute) => void;
   startOnNew?: boolean;
+  unreadChat?: number;
 }
 
-export default function CrmTab({ currentRoute, onNavigate, startOnNew }: Props) {
+export default function CrmTab({ currentRoute, onNavigate, startOnNew, unreadChat }: Props) {
   const [screen, setScreen] = useState<CrmScreen>(startOnNew ? 'new' : 'list');
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
@@ -39,6 +40,7 @@ export default function CrmTab({ currentRoute, onNavigate, startOnNew }: Props) 
       currentRoute={currentRoute}
       onNavigate={onNavigate}
       onBack={canGoBack ? () => setScreen('list') : undefined}
+      unreadChat={unreadChat}
       topBarAction={
         screen === 'list' ? (
           <button

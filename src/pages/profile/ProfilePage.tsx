@@ -8,6 +8,7 @@ import Badge from '../../components/ui/Badge';
 interface Props {
   currentRoute: AppRoute;
   onNavigate: (route: AppRoute) => void;
+  unreadChat?: number;
 }
 
 const ROLE_LABELS: Record<string, string> = {
@@ -16,7 +17,7 @@ const ROLE_LABELS: Record<string, string> = {
   AGENT: 'Agente',
 };
 
-export default function ProfilePage({ currentRoute, onNavigate }: Props) {
+export default function ProfilePage({ currentRoute, onNavigate, unreadChat }: Props) {
   const { user, logout } = useAuth();
 
   if (!user) return null;
@@ -28,7 +29,7 @@ export default function ProfilePage({ currentRoute, onNavigate }: Props) {
   };
 
   return (
-    <AppShell title="Perfil" currentRoute={currentRoute} onNavigate={onNavigate}>
+    <AppShell title="Perfil" currentRoute={currentRoute} onNavigate={onNavigate} unreadChat={unreadChat}>
       <div className="flex flex-col gap-4 pb-8">
         {/* User card */}
         <div className="bg-white px-4 py-6 flex flex-col items-center gap-3 border-b border-gray-100">
