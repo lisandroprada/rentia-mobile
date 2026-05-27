@@ -7,6 +7,7 @@ import { useAppBadge } from './hooks/useAppBadge';
 
 import DesktopBanner from './components/ui/DesktopBanner';
 import UpdatePrompt from './components/ui/UpdatePrompt';
+import PushNotificationsSetup from './components/ui/PushNotificationsSetup';
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import CrmTab from './pages/crm/CrmTab';
@@ -48,20 +49,22 @@ export default function App() {
 
   const tabProps = { currentRoute, onNavigate: handleNavigate, unreadChat };
 
+  // Render push setup as overlay inside authenticated tree (has access to auth context)
+  const pushSetup = <PushNotificationsSetup />;
+
   if (currentRoute === AppRoute.Profile) {
-    return <ProfilePage {...tabProps} />;
+    return <>{pushSetup}<ProfilePage {...tabProps} /></>;
   }
 
   if (currentRoute.startsWith('chat')) {
-    return <ChatTab {...tabProps} />;
+    return <>{pushSetup}<ChatTab {...tabProps} /></>;
   }
 
   if (currentRoute === AppRoute.Dashboard) {
-    return <DashboardPage {...tabProps} />;
+    return <>{pushSetup}<DashboardPage {...tabProps} /></>;
   }
 
-  // CrmNew navigated from Dashboard opens CrmTab with new screen pre-selected
-  return <CrmTab {...tabProps} startOnNew={currentRoute === AppRoute.CrmNew} />;
+  return <>{pushSetup}<CrmTab {...tabProps} startOnNew={currentRoute === AppRoute.CrmNew} /></>;
 }
 
 export function AppWithProviders() {

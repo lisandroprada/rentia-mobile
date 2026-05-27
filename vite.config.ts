@@ -19,38 +19,20 @@ export default defineConfig(({ mode }) => {
         '/uploads': { target: apiTarget, changeOrigin: true },
         '/whatsapp-inbox': { target: apiTarget, changeOrigin: true },
         '/socket.io': { target: apiTarget, ws: true, changeOrigin: true },
+        '/push': { target: apiTarget, changeOrigin: true },
       },
     },
     plugins: [
       react(),
       tailwindcss(),
       VitePWA({
+        strategies: 'injectManifest',
+        srcDir: 'src',
+        filename: 'sw.ts',
         registerType: 'autoUpdate',
         devOptions: { enabled: false },
-        workbox: {
+        injectManifest: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-          runtimeCaching: [
-            {
-              urlPattern: /\/api\/v1\/crm\/cases$/,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'crm-cases',
-                expiration: { maxAgeSeconds: 3600 },
-              },
-            },
-            {
-              urlPattern: /\/whatsapp-inbox\/conversations$/,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'wa-conversations',
-                expiration: { maxAgeSeconds: 300 },
-              },
-            },
-            {
-              urlPattern: /\/(api\/v1|whatsapp-inbox)\/.*/,
-              handler: 'NetworkOnly',
-            },
-          ],
         },
         manifest: {
           name: 'Rentia Mobile',
