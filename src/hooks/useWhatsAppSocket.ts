@@ -7,6 +7,19 @@ export function useWhatsAppSocket(enabled: boolean) {
   const queryClient = useQueryClient();
   const socketRef = useRef<Socket | null>(null);
 
+  // Refetch when the app comes back to foreground (e.g. user tapped a push notification)
+  useEffect(() => {
+    if (!enabled) return;
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible') {
+        queryClient.invalidateQueries({ queryKey: ['wa-conversations'] });
+        queryClient.invalidateQueries({ queryKey: ['wa-thread'] });
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisible);
+    return () => document.removeEventListener('visibilitychange', handleVisible);
+  }, [enabled, queryClient]);
+
   useEffect(() => {
     if (!enabled) return;
 

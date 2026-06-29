@@ -9,6 +9,7 @@ interface AppShellProps {
   onBack?: () => void;
   topBarAction?: React.ReactNode;
   unreadChat?: number;
+  overflowHidden?: boolean;
   children: React.ReactNode;
 }
 
@@ -19,12 +20,15 @@ export default function AppShell({
   onBack,
   topBarAction,
   unreadChat,
+  overflowHidden,
   children,
 }: AppShellProps) {
   return (
     <div className="flex flex-col h-dvh bg-gray-50">
       <TopBar title={title} onBack={onBack} action={topBarAction} />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className={`flex-1 ${overflowHidden ? 'overflow-hidden' : 'overflow-y-auto'}`}>
+        {children}
+      </main>
       <BottomTabBar currentRoute={currentRoute} onNavigate={onNavigate} unreadChat={unreadChat} />
     </div>
   );

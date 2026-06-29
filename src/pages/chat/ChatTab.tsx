@@ -30,6 +30,7 @@ export default function ChatTab({ currentRoute, onNavigate, unreadChat }: Props)
       onNavigate={onNavigate}
       onBack={screen === 'thread' ? () => setScreen('list') : undefined}
       unreadChat={unreadChat}
+      overflowHidden={screen === 'thread'}
     >
       {screen === 'list' && <ConversationListPage onOpenThread={handleOpenThread} />}
       {screen === 'thread' && selectedCaseId && (

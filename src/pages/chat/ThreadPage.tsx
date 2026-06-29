@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Send, Paperclip, Bot, BotOff, Image, FileText, Mic } from 'lucide-react';
+import { Send, Paperclip, Bot, BotOff, Image, FileText, Mic, Phone } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { waInboxApi, WaMessage } from '../../api/whatsappInboxApi';
 import Avatar from '../../components/ui/Avatar';
 import Spinner from '../../components/ui/Spinner';
 import { formatDateTime } from '../../utils/dateUtils';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Props {
   caseId: string;
@@ -54,6 +55,7 @@ function MediaPreview({ message }: { message: WaMessage }) {
 
 export default function ThreadPage({ caseId }: Props) {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [text, setText] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -126,6 +128,15 @@ export default function ThreadPage({ caseId }: Props) {
           <p className="text-sm font-semibold text-gray-900 truncate">{thread.contactName}</p>
           <p className="text-xs text-gray-400">{thread.phone}</p>
         </div>
+        <a
+          href={`https://wa.me/${thread.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${thread.contactName}, te escribe ${user?.firstName ?? user?.name ?? ''} desde su número personal`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-1.5 rounded-lg text-green-600 active:bg-green-50"
+          title="Abrir en WhatsApp personal"
+        >
+          <Phone size={18} />
+        </a>
         <button
           onClick={() => botMutation.mutate(!thread.botEnabled)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
@@ -141,7 +152,7 @@ export default function ThreadPage({ caseId }: Props) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2">
+      <div className="flex-1 overflow-y-auto overscroll-y-contain px-4 py-4 flex flex-col gap-2">
         {thread.messages.map((msg) => {
           const isOut = msg.direction === 'OUTGOING';
           return (
