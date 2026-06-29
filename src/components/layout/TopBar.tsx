@@ -8,7 +8,7 @@ interface TopBarProps {
 
 export default function TopBar({ title, onBack, action }: TopBarProps) {
   return (
-    <header className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100 safe-top">
+    <header className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100 safe-top touch-none select-none">
       {onBack && (
         <button
           onClick={onBack}

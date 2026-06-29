@@ -27,7 +27,7 @@ export default function BottomTabBar({ currentRoute, onNavigate, unreadChat = 0 
   const activeTab = routeToTab(currentRoute);
 
   return (
-    <nav className="flex items-center border-t border-gray-100 bg-white safe-bottom">
+    <nav className="flex items-center border-t border-gray-100 bg-white safe-bottom touch-none select-none">
       {tabs.map(({ id, label, icon: Icon, route }) => {
         const isActive = activeTab === id;
         const showBadge = id === 'chat' && unreadChat > 0;
