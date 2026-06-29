@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { authApi } from '../../api/authApi';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,6 +15,13 @@ export default function LoginPage({ onLogin }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('session_expired')) {
+      sessionStorage.removeItem('session_expired');
+      toast('Tu sesión expiró. Ingresá nuevamente.', { icon: '🔒' });
+    }
+  }, []);
 
   // 2FA state
   const [twoFA, setTwoFA] = useState<Auth2FAResponse | null>(null);

@@ -23,7 +23,10 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('rm_token');
       localStorage.removeItem('rm_user');
       localStorage.removeItem('rm_current_route');
-      if (hadSession) window.location.reload();
+      if (hadSession) {
+        sessionStorage.setItem('session_expired', '1');
+        window.location.reload();
+      }
     }
     return Promise.reject(error);
   },

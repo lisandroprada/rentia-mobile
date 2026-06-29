@@ -33,6 +33,17 @@ function MediaPreview({ message }: { message: WaMessage }) {
     );
   }
 
+  if (mediaType === 'audio' && meta?.mediaUrl) {
+    return (
+      <audio
+        controls
+        src={meta.mediaUrl as string}
+        className="max-w-[220px] h-9"
+        preload="metadata"
+      />
+    );
+  }
+
   return (
     <div className="flex items-center gap-2 text-sm opacity-80">
       {icons[mediaType] ?? <Paperclip size={16} />}
