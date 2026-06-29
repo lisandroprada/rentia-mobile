@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Send, Paperclip, Bot, BotOff, Image, FileText, Mic, Phone } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { waInboxApi, WaMessage } from '../../api/whatsappInboxApi';
+import { API_BASE_URL } from '../../api/apiClient';
 import Avatar from '../../components/ui/Avatar';
 import Spinner from '../../components/ui/Spinner';
 import { formatDateTime } from '../../utils/dateUtils';
@@ -24,21 +25,25 @@ function MediaPreview({ message }: { message: WaMessage }) {
     document: <FileText size={16} />,
   };
 
-  if (mediaType === 'image' && meta?.mediaUrl) {
+  const mediaSrc = meta?.localPath
+    ? `${API_BASE_URL}${meta.localPath as string}`
+    : (meta?.mediaUrl as string | undefined);
+
+  if (mediaType === 'image' && mediaSrc) {
     return (
       <img
-        src={meta.mediaUrl as string}
+        src={mediaSrc}
         alt="imagen"
         className="rounded-lg max-w-[200px] max-h-[200px] object-cover"
       />
     );
   }
 
-  if (mediaType === 'audio' && meta?.mediaUrl) {
+  if (mediaType === 'audio' && mediaSrc) {
     return (
       <audio
         controls
-        src={meta.mediaUrl as string}
+        src={mediaSrc}
         className="max-w-[220px] h-9"
         preload="metadata"
       />
